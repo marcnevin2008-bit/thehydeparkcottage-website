@@ -73,11 +73,14 @@ function Badge({ children }) {
 function drawCover(ctx, img, W, H, scale = 1.0) {
   const iw = img.naturalWidth || 1;
   const ih = img.naturalHeight || 1;
+
+  // basic "object-cover" behavior, no extra zoom
   const base = Math.max(W / iw, H / ih) * scale;
   const dw = iw * base;
   const dh = ih * base;
   const dx = (W - dw) / 2;
   const dy = (H - dh) / 2;
+
   ctx.drawImage(img, 0, 0, iw, ih, dx, dy, dw, dh);
 }
 
@@ -95,28 +98,30 @@ function CrossfadeImage({ src, alt, duration = 2200 }) {
   useEffect(() => {
     const c = canvasRef.current;
     if (!c) return;
+
     const resize = () => {
       const rect = c.getBoundingClientRect();
       const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-      c.width = Math.round(rect.width * dpr);
-      c.height = Math.round(rect.height * dpr);
-      c.style.width = `${rect.width}px`;
-      c.style.height = `${rect.height}px`;
-      const cur = currentRef.current;
-      if (cur && cur.complete) {
-        const ctx = c.getContext("2d", { alpha: false });
-        ctx.clearRect(0, 0, c.width, c.height);
-        drawCover(ctx, cur, c.width, c.height, 1.005);
+      c.width = Math.max(1, Math.floor(rect.width * dpr));
+      c.height = Math.max(1, Math.floor(rect.height * dpr));
+
+      const ctx = c.getContext("2d", { alpha: false });
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      if (currentRef.current) {
+        drawCover(ctx, currentRef.current, c.width, c.height, 1.0);
       }
     };
+
     resize();
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  // Initial paint
+  // Initial paint (no zoom)
   useEffect(() => {
     if (firstPaintedRef.current) return;
+
     const img = new Image();
     img.decoding = "async";
     img.src = src;
@@ -124,33 +129,37 @@ function CrossfadeImage({ src, alt, duration = 2200 }) {
       currentRef.current = img;
       const c = canvasRef.current;
       if (!c) return;
+
       const ctx = c.getContext("2d", { alpha: false });
       ctx.clearRect(0, 0, c.width, c.height);
-      drawCover(ctx, img, c.width, c.height, 1.005);
+      drawCover(ctx, img, c.width, c.height, 1.0);
       firstPaintedRef.current = true;
     };
-  }, []); // once
+  }, [src]);
 
-  // Animate on src change
+  // Animate on src change (no scaling animation)
   useEffect(() => {
     const token = ++tokenRef.current;
     const next = new Image();
     next.decoding = "async";
     next.src = src;
+
     next.onload = () => {
       if (tokenRef.current !== token) return;
+
+      // If no current image yet, just paint and stop
       if (!currentRef.current) {
         currentRef.current = next;
         const c = canvasRef.current;
         if (c) {
           const ctx = c.getContext("2d", { alpha: false });
           ctx.clearRect(0, 0, c.width, c.height);
-          drawCover(ctx, next, c.width, c.height, 1.005);
+          drawCover(ctx, next, c.width, c.height, 1.0);
         }
         return;
       }
-      nextRef.current = next;
 
+      nextRef.current = next;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       startRef.current = performance.now();
 
@@ -165,14 +174,13 @@ function CrossfadeImage({ src, alt, duration = 2200 }) {
         const t = Math.min(1, (now - startRef.current) / duration);
         const k = ease(t);
 
-        // gentle micro-zoom for perceived smoothness
-        const underScale = 1.005 + 0.006 * k; // 1.005 → 1.011
-        const overScale  = 1.018 - 0.013 * k; // 1.018 → 1.005
-
         ctx.clearRect(0, 0, c.width, c.height);
-        drawCover(ctx, cur, c.width, c.height, underScale);
+        // base image
+        drawCover(ctx, cur, c.width, c.height, 1.0);
+
+        // fade in next image on top
         ctx.globalAlpha = k;
-        drawCover(ctx, nxt, c.width, c.height, overScale);
+        drawCover(ctx, nxt, c.width, c.height, 1.0);
         ctx.globalAlpha = 1;
 
         if (t < 1) {
@@ -199,7 +207,13 @@ function CrossfadeImage({ src, alt, duration = 2200 }) {
         ref={canvasRef}
         aria-label={alt}
         role="img"
-        style={{ display: "block", width: "100%", height: "100%", transform: "translateZ(0)", backfaceVisibility: "hidden" }}
+        style={{
+          display: "block",
+          width: "100%",
+          height: "100%",
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
+        }}
       />
     </div>
   );
@@ -538,7 +552,7 @@ function HomePage() {
       <p className="mt-3 text-coal/70 text-sm">
         Questions before or during your stay? Reach us anytime at{" "}
         <a href="mailto:stay@carverhome.co" className="underline">
-          stay@carverhome.co
+          info@thehydeparkcottage.com
         </a>.
       </p>
     </div>
