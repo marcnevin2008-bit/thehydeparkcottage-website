@@ -222,6 +222,9 @@ function CrossfadeImage({ src, alt, duration = 2200 }) {
 /* ----------------------- Top Nav + Footer ----------------------- */
 
 function Nav() {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
   const links = [
     { to: "/", label: "Home" },
     { to: "/amenities", label: "Amenities" },
@@ -229,43 +232,101 @@ function Nav() {
     { to: "/things", label: "Things to Do" },
     { to: "/faq", label: "FAQ" },
   ];
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   return (
     <nav className="sticky top-0 z-40 bg-ivory/80 backdrop-blur border-b border-coal/10">
-  <div className={`${CONTAINER} h-16 w-full`}>
-  <div className="flex items-center justify-between h-full w-full">
-    {/* Left: site name/tagline */}
-    <NavLink
-      to="/"
-      className="font-display font-semibold tracking-tight text-moss whitespace-nowrap"
-    >
-      {SITE_NAME} • {SITE_TAGLINE}
-    </NavLink>
+      <div className={`${CONTAINER} h-16 w-full`}>
+        <div className="flex items-center justify-between h-full w-full">
+          {/* Left: site name/tagline */}
+          <NavLink
+            to="/"
+            className="font-display font-semibold tracking-tight text-moss whitespace-nowrap"
+          >
+            {SITE_NAME} • {SITE_TAGLINE}
+          </NavLink>
 
-    {/* Middle: nav links (expand but don’t push edges) */}
-    <div className="hidden md:flex items-center gap-6 text-sm mx-6 flex-1 justify-center">
-      {links.map((it) => (
-        <NavLink
-          key={it.to}
-          to={it.to}
-          className={({ isActive }) =>
-            `hover:text-moss ${isActive ? "text-moss" : "text-coal/80"}`
-          }
-        >
-          {it.label}
-        </NavLink>
-      ))}
-    </div>
+          {/* Middle: desktop nav links */}
+          <div className="hidden md:flex items-center gap-6 text-sm mx-6 flex-1 justify-center">
+            {links.map((it) => (
+              <NavLink
+                key={it.to}
+                to={it.to}
+                className={({ isActive }) =>
+                  `hover:text-moss ${isActive ? "text-moss" : "text-coal/80"}`
+                }
+              >
+                {it.label}
+              </NavLink>
+            ))}
+          </div>
 
-    {/* Right: Book now, aligned to right edge of the same container */}
-    <a
-      href={airbnbUrl}
-      className="inline-flex rounded-2xl bg-moss text-white px-4 py-2 text-sm font-medium shadow hover:opacity-90"
-    >
-      Book now
-    </a>
-  </div>
-</div>
-</nav>
+          {/* Right: Book now + mobile hamburger */}
+          <div className="flex items-center gap-3">
+            <a
+              href={airbnbUrl}
+              className="inline-flex rounded-2xl bg-moss text-white px-4 py-2 text-sm font-medium shadow hover:opacity-90"
+            >
+              Book now
+            </a>
+
+            {/* Hamburger only on mobile */}
+            <button
+              type="button"
+              className="md:hidden inline-flex items-center justify-center rounded-xl border border-coal/20 bg-white/80 p-2 shadow-sm"
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Toggle navigation menu"
+            >
+              {/* Simple icon: three lines that turn into an X */}
+              <span className="relative block w-5 h-3">
+                <span
+                  className={`absolute inset-x-0 top-0 h-[2px] rounded-full bg-coal transition-transform duration-200 ${
+                    open ? "translate-y-[6px] rotate-45" : ""
+                  }`}
+                />
+                <span
+                  className={`absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-coal transition-opacity duration-200 ${
+                    open ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+                <span
+                  className={`absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-coal transition-transform duration-200 ${
+                    open ? "-translate-y-[6px] -rotate-45" : ""
+                  }`}
+                />
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden border-t border-coal/10 bg-ivory/95">
+          <div className={`${CONTAINER} py-3 flex flex-col gap-2`}>
+            {links.map((it) => (
+              <NavLink
+                key={it.to}
+                to={it.to}
+                className={({ isActive }) =>
+                  `block rounded-xl px-3 py-2 text-sm ${
+                    isActive
+                      ? "bg-moss/10 text-moss font-medium"
+                      : "text-coal/80 hover:bg-coal/5"
+                  }`
+                }
+              >
+                {it.label}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
   );
 }
 
