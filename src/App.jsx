@@ -264,9 +264,9 @@ function Footer() {
           <p className="text-coal/60">© {new Date().getFullYear()} Carver Home LLC. All rights reserved.</p>
         </div>
         <div className="text-sm text-coal/70">
-          <a href="mailto:stay@carverhome.co" className="underline">stay@carverhome.co</a>
+          <a href="mailto:info@thehydeparkcottage.com" className="underline">info@thehydeparkcottage.com</a>
           <span className="mx-2">•</span>
-          <NavLink to="/faq" className="underline">House Rules</NavLink>
+          <NavLink to="/faq" className="underline">FAQs</NavLink>
         </div>
       </div>
     </footer>
