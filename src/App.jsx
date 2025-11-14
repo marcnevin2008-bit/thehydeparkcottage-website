@@ -265,11 +265,12 @@ function Nav() {
             ))}
           </div>
 
-          {/* Right: Book now + mobile hamburger */}
+          {/* Right: desktop Book now + mobile hamburger */}
           <div className="flex items-center gap-3">
+            {/* Desktop-only Book now */}
             <a
               href={airbnbUrl}
-              className="inline-flex rounded-2xl bg-moss text-white px-4 py-2 text-sm font-medium shadow hover:opacity-90"
+              className="hidden md:inline-flex rounded-2xl bg-moss text-white px-4 py-2 text-sm font-medium shadow hover:opacity-90"
             >
               Book now
             </a>
@@ -281,7 +282,6 @@ function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-label="Toggle navigation menu"
             >
-              {/* Simple icon: three lines that turn into an X */}
               <span className="relative block w-5 h-3">
                 <span
                   className={`absolute inset-x-0 top-0 h-[2px] rounded-full bg-coal transition-transform duration-200 ${
@@ -308,6 +308,14 @@ function Nav() {
       {open && (
         <div className="md:hidden border-t border-coal/10 bg-ivory/95">
           <div className={`${CONTAINER} py-3 flex flex-col gap-2`}>
+            {/* Mobile Book now button */}
+            <a
+              href={airbnbUrl}
+              className="mb-1 inline-flex w-full items-center justify-center rounded-2xl bg-moss text-white px-4 py-2 text-sm font-medium shadow hover:opacity-90"
+            >
+              Book now on Airbnb
+            </a>
+
             {links.map((it) => (
               <NavLink
                 key={it.to}
@@ -329,7 +337,6 @@ function Nav() {
     </nav>
   );
 }
-
 function Footer() {
   return (
     <footer className="border-t border-coal/10">
