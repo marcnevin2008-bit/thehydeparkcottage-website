@@ -486,7 +486,8 @@ function HomePage() {
         <meta property="og:url" content="https://www.thehydeparkcottage.com/" />
         <meta
           property="og:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
         <meta
           property="og:image:alt"
@@ -503,7 +504,8 @@ function HomePage() {
         />
         <meta
           name="twitter:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
 
         <meta name="robots" content="index,follow" />
@@ -761,7 +763,8 @@ function AmenitiesPage() {
         />
         <meta
           property="og:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
         <meta
           property="og:image:alt"
@@ -780,7 +783,8 @@ function AmenitiesPage() {
         />
         <meta
           name="twitter:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
 
         <meta name="robots" content="index,follow" />
@@ -954,7 +958,8 @@ function RoomsPage() {
         <meta property="og:url" content="https://www.thehydeparkcottage.com/rooms" />
         <meta
           property="og:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
         <meta
           property="og:image:alt"
@@ -973,7 +978,8 @@ function RoomsPage() {
         />
         <meta
           name="twitter:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
 
         <meta name="robots" content="index,follow" />
@@ -1269,7 +1275,8 @@ function ThingsPage() {
         <meta property="og:url" content="https://www.thehydeparkcottage.com/things" />
         <meta
           property="og:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
         <meta
           property="og:image:alt"
@@ -1288,7 +1295,8 @@ function ThingsPage() {
         />
         <meta
           name="twitter:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
 
         <meta name="robots" content="index,follow" />
@@ -1658,7 +1666,8 @@ function FAQPage() {
         <meta property="og:url" content="https://www.thehydeparkcottage.com/faq" />
         <meta
           property="og:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
         <meta
           property="og:image:alt"
@@ -1677,7 +1686,8 @@ function FAQPage() {
         />
         <meta
           name="twitter:image"
-          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
+"
         />
 
         <meta name="robots" content="index,follow" />
