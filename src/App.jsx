@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Routes, Route, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   SITE_NAME, SITE_TAGLINE, ADDRESS, CHECKOUT_TIME, airbnbUrl,
   images, amenities, thingsToDo, faqs,
@@ -464,8 +465,50 @@ function HomePage() {
   useArrowKeys(setActive, images.length);
   useAutoAdvance(!paused, setActive, images.length, 4800);
 
-  return (
+   return (
     <>
+      <Helmet>
+        <title>The Hyde Park Cottage – Historic Hyde Park NY Airbnb</title>
+        <meta
+          name="description"
+          content="Stay at The Hyde Park Cottage, a cozy 1940s retreat in historic Hyde Park, NY—modern amenities, vintage charm, and a perfect base for exploring the Hudson Valley, CIA, FDR Library, and the Walkway Over the Hudson."
+        />
+        <link rel="canonical" href="https://www.thehydeparkcottage.com/" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="The Hyde Park Cottage" />
+        <meta property="og:title" content="The Hyde Park Cottage – Historic Hyde Park NY Airbnb" />
+        <meta
+          property="og:description"
+          content="Stay at The Hyde Park Cottage, a cozy 1940s retreat in historic Hyde Park, NY—modern amenities, vintage charm, and a perfect base for exploring the Hudson Valley, CIA, FDR Library, and the Walkway Over the Hudson."
+        />
+        <meta property="og:url" content="https://www.thehydeparkcottage.com/" />
+        <meta
+          property="og:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+        <meta
+          property="og:image:alt"
+          content="The Hyde Park Cottage exterior and backyard in Hyde Park, NY"
+        />
+        <meta property="og:locale" content="en_US" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="The Hyde Park Cottage – Historic Hyde Park NY Airbnb" />
+        <meta
+          name="twitter:description"
+          content="Stay at The Hyde Park Cottage, a cozy 1940s retreat in historic Hyde Park, NY—modern amenities, vintage charm, and a perfect base for exploring the Hudson Valley."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+
+        <meta name="robots" content="index,follow" />
+      </Helmet>
+
       {/* Title / hero (square image) */}
       <section className="relative bg-sage/30 border-b border-coal/10">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16">
@@ -693,6 +736,56 @@ function AmenitiesPage() {
   const items = activeKey === "all" ? allItems : allItems.filter((i) => i.cat === activeKey);
 
   return (
+    <>
+      <Helmet>
+        <title>Amenities | The Hyde Park Cottage – Hudson Valley Getaway</title>
+        <meta
+          name="description"
+          content="Discover the amenities at The Hyde Park Cottage in Hyde Park, NY: fully equipped kitchen, cozy living room, fast Wi-Fi, smart TVs, wood-burning fireplace, dedicated workspaces, and a spacious backyard with patio and grill."
+        />
+        <link rel="canonical" href="https://www.thehydeparkcottage.com/amenities" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="The Hyde Park Cottage" />
+        <meta
+          property="og:title"
+          content="Amenities | The Hyde Park Cottage – Hudson Valley Getaway"
+        />
+        <meta
+          property="og:description"
+          content="Discover the amenities at The Hyde Park Cottage in Hyde Park, NY: fully equipped kitchen, cozy living room, fast Wi-Fi, smart TVs, wood-burning fireplace, dedicated workspaces, and a spacious backyard with patio and grill."
+        />
+        <meta
+          property="og:url"
+          content="https://www.thehydeparkcottage.com/amenities"
+        />
+        <meta
+          property="og:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+        <meta
+          property="og:image:alt"
+          content="Inviting living space and amenities at The Hyde Park Cottage in Hyde Park, NY"
+        />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Amenities | The Hyde Park Cottage – Hudson Valley Getaway"
+        />
+        <meta
+          name="twitter:description"
+          content="Discover the amenities at The Hyde Park Cottage in Hyde Park, NY: fully equipped kitchen, cozy living room, fast Wi-Fi, smart TVs, wood-burning fireplace, dedicated workspaces, and a spacious backyard with patio and grill."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+
+        <meta name="robots" content="index,follow" />
+      </Helmet>
+
     <Section title="Amenities" intro="Everything you need for a comfortable stay." tone="dark">
       {/* Hero Amenities (4 cards with their own sliders) */}
       <div className="grid md:grid-cols-2 gap-6 mb-10">
@@ -747,6 +840,7 @@ function AmenitiesPage() {
 
       {/* Removed the long category lists */}
     </Section>
+ </>
   );
 }
   /* Smooth sliding carousel (translateX) */
@@ -839,6 +933,52 @@ function BedroomCard({ name, subtitle, images }) {
 function RoomsPage() {
   return (
     <>
+    <Helmet>
+        <title>Rooms & Sleeping Arrangements | The Hyde Park Cottage</title>
+        <meta
+          name="description"
+          content="Explore the rooms at The Hyde Park Cottage in Hyde Park, NY. Comfortable bedrooms, quality mattresses, fresh linens, and flexible sleeping arrangements for families, couples, and small groups visiting the Hudson Valley."
+        />
+        <link rel="canonical" href="https://www.thehydeparkcottage.com/rooms" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="The Hyde Park Cottage" />
+        <meta
+          property="og:title"
+          content="Rooms & Sleeping Arrangements | The Hyde Park Cottage"
+        />
+        <meta
+          property="og:description"
+          content="Explore the rooms at The Hyde Park Cottage in Hyde Park, NY. Comfortable bedrooms, quality mattresses, fresh linens, and flexible sleeping arrangements for families, couples, and small groups visiting the Hudson Valley."
+        />
+        <meta property="og:url" content="https://www.thehydeparkcottage.com/rooms" />
+        <meta
+          property="og:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+        <meta
+          property="og:image:alt"
+          content="Cozy bedroom at The Hyde Park Cottage vacation rental in Hyde Park, NY"
+        />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Rooms & Sleeping Arrangements | The Hyde Park Cottage"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore the rooms at The Hyde Park Cottage in Hyde Park, NY. Comfortable bedrooms, quality mattresses, fresh linens, and flexible sleeping arrangements for families, couples, and small groups visiting the Hudson Valley."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+
+        <meta name="robots" content="index,follow" />
+      </Helmet>
+
       <Section
         title="Bedrooms"
         intro="Three restful bedrooms with cozy, cottage-core touches."
@@ -1108,6 +1248,52 @@ function ThingsPage() {
 
   return (
     <>
+    <Helmet>
+        <title>Things to Do in Hyde Park & the Hudson Valley | The Hyde Park Cottage</title>
+        <meta
+          name="description"
+          content="Plan your Hudson Valley getaway with our curated guide to things to do near The Hyde Park Cottage: Culinary Institute of America, FDR Presidential Library, Vanderbilt Mansion, Walkway Over the Hudson, Rhinebeck, wineries, hikes, and more."
+        />
+        <link rel="canonical" href="https://www.thehydeparkcottage.com/things" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="The Hyde Park Cottage" />
+        <meta
+          property="og:title"
+          content="Things to Do in Hyde Park & the Hudson Valley | The Hyde Park Cottage"
+        />
+        <meta
+          property="og:description"
+          content="Plan your Hudson Valley getaway with our curated guide to things to do near The Hyde Park Cottage: Culinary Institute of America, FDR Presidential Library, Vanderbilt Mansion, Walkway Over the Hudson, Rhinebeck, wineries, hikes, and more."
+        />
+        <meta property="og:url" content="https://www.thehydeparkcottage.com/things" />
+        <meta
+          property="og:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+        <meta
+          property="og:image:alt"
+          content="Map and photos of Hudson Valley attractions near The Hyde Park Cottage in Hyde Park, NY"
+        />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Things to Do in Hyde Park & the Hudson Valley | The Hyde Park Cottage"
+        />
+        <meta
+          name="twitter:description"
+          content="Plan your Hudson Valley getaway with our curated guide to things to do near The Hyde Park Cottage."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+
+        <meta name="robots" content="index,follow" />
+      </Helmet>
+
       {/* Hero banner */}
       <section className="relative bg-sage/20 border-b border-coal/10">
         <div className={`${CONTAINER} py-10 md:py-14`}>
@@ -1450,6 +1636,53 @@ function FAQItem({ q, a }) {
 /* The full FAQ page section */
 function FAQPage() {
   return (
+    <>
+      <Helmet>
+        <title>FAQ | The Hyde Park Cottage – Policies, Check-In & Stay Details</title>
+        <meta
+          name="description"
+          content="Find answers to common questions about The Hyde Park Cottage in Hyde Park, NY, including check-in and check-out times, house rules, parking, Wi-Fi, pets, cancellations, and how to book your stay in the Hudson Valley."
+        />
+        <link rel="canonical" href="https://www.thehydeparkcottage.com/faq" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="The Hyde Park Cottage" />
+        <meta
+          property="og:title"
+          content="FAQ | The Hyde Park Cottage – Policies, Check-In & Stay Details"
+        />
+        <meta
+          property="og:description"
+          content="Find answers to common questions about The Hyde Park Cottage in Hyde Park, NY, including check-in and check-out times, house rules, parking, Wi-Fi, pets, cancellations, and how to book your stay in the Hudson Valley."
+        />
+        <meta property="og:url" content="https://www.thehydeparkcottage.com/faq" />
+        <meta
+          property="og:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+        <meta
+          property="og:image:alt"
+          content="Guest information and FAQs for The Hyde Park Cottage in Hyde Park, NY"
+        />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="FAQ | The Hyde Park Cottage – Policies, Check-In & Stay Details"
+        />
+        <meta
+          name="twitter:description"
+          content="Find answers to common questions about The Hyde Park Cottage in Hyde Park, NY."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
+        />
+
+        <meta name="robots" content="index,follow" />
+      </Helmet>
+
     <Section
       title="Frequently Asked Questions"
       intro="Quick answers to the most common questions about your stay."
@@ -1461,6 +1694,7 @@ function FAQPage() {
         ))}
       </div>
     </Section>
+    </>
   );
 }
 /* ================== FAQ PAGE (END) ================== */
