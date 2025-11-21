@@ -152,10 +152,10 @@ export const heroAmenities = [
   title: "Wood-burning Fireplace",
   desc: "Cozy, seasonal use for relaxed evenings.",
   images: [
-  "/photos/amenities/fireplace/fireplace1.HEIC",
-  "/photos/amenities/fireplace/fireplace2.HEIC",
-  "/photos/amenities/fireplace/fireplace3.HEIC",
-  "/photos/amenities/fireplace/fireplace4.HEIC",
+  "/photos/amenities/fireplace/fireplace1.jpg",
+  "/photos/amenities/fireplace/fireplace2.jpg",
+  "/photos/amenities/fireplace/fireplace3.jpg",
+  "/photos/amenities/fireplace/fireplace4.jpg",
 ],
 },
   {
@@ -163,10 +163,10 @@ export const heroAmenities = [
     title: "Dedicated Office",
     desc: "Desk, chair, and fast Wi-Fi for remote work.",
     images: [
-      "/photos/amenities/office/office1.HEIC",
-  "/photos/amenities/office/office2.HEIC",
-  "/photos/amenities/office/office3.HEIC",
-  "/photos/amenities/office/office4.HEIC",
+      "/photos/amenities/office/office1.jpg",
+  "/photos/amenities/office/office2.jpg",
+  "/photos/amenities/office/office3.jpg",
+  "/photos/amenities/office/office4.jpg",
     ],
   },
   {
@@ -174,9 +174,9 @@ export const heroAmenities = [
     title: "Compact Home Gym",
     desc: "Treadmill, light weights, and yoga mat.",
     images: [
-      "/photos/amenities/gym/gym1.HEIC",
-  "/photos/amenities/gym/gym2.HEIC",
-  "/photos/amenities/gym/gym3.HEIC",
+      "/photos/amenities/gym/gym1.jpg",
+  "/photos/amenities/gym/gym2.jpg",
+  "/photos/amenities/gym/gym3.jpg",
     ],
   },
   {
@@ -184,44 +184,44 @@ export const heroAmenities = [
     title: "Sunroom",
     desc: "Bright, relaxing nook perfect for morning coffee.",
     images: [
-      "/photos/amenities/sunroom/sunroom1.HEIC",
-  "/photos/amenities/sunroom/sunroom2.HEIC",
-  "/photos/amenities/sunroom/sunroom3.HEIC",
-  "/photos/amenities/sunroom/sunroom4.HEIC",
+      "/photos/amenities/sunroom/sunroom1.jpg",
+  "/photos/amenities/sunroom/sunroom2.jpg",
+  "/photos/amenities/sunroom/sunroom3.jpg",
+  "/photos/amenities/sunroom/sunroom4.jpg",
     ],
   },
 ];
 // --- Bedrooms: 3-image sliders (stock placeholders for now)
 export const bedroomGalleries = {
   acorn: [
-     "/photos/rooms/acorn/acorn1.HEIC",
-  "/photos/rooms/acorn/acorn2.HEIC",
-  "/photos/rooms/acorn/acorn3.HEIC",
-  "/photos/rooms/acorn/acorn4.HEIC",
+     "/photos/rooms/acorn/acorn1.jpg",
+  "/photos/rooms/acorn/acorn2.jpg",
+  "/photos/rooms/acorn/acorn3.jpg",
+  "/photos/rooms/acorn/acorn4.jpg",
   ],
   mushroom: [
-    "/photos/rooms/mushroom/mushroom1.HEIC",
-  "/photos/rooms/mushroom/mushroom2.HEIC",
-  "/photos/rooms/mushroom/mushroom3.HEIC",
-  "/photos/rooms/mushroom/mushroom4.HEIC",
+    "/photos/rooms/mushroom/mushroom1.jpg",
+  "/photos/rooms/mushroom/mushroom2.jpg",
+  "/photos/rooms/mushroom/mushroom3.jpg",
+  "/photos/rooms/mushroom/mushroom4.jpg",
   ],
   fern: [
-    "/photos/rooms/fern/fern1.HEIC",
-  "/photos/rooms/fern/fern2.HEIC",
-  "/photos/rooms/fern/fern3.HEIC",
-  "/photos/rooms/fern/fern4.HEIC",
-  "/photos/rooms/fern/fern5.HEIC",
+    "/photos/rooms/fern/fern1.jpg",
+  "/photos/rooms/fern/fern2.jpg",
+  "/photos/rooms/fern/fern3.jpg",
+  "/photos/rooms/fern/fern4.jpg",
+  "/photos/rooms/fern/fern5.jpg",
   ],
 };
 
 // --- Other rooms: single tile images (stock placeholders)
 export const otherRooms = [
-  { name: "Living Room", img: "/photos/rooms/livingroom/livingroom.HEIC", desc: "Cozy seating with smart TV and fireplace." },
-  { name: "Sunroom", img: "/photos/rooms/sunroom/sunroom.HEIC", desc: "Bright nook for morning coffee." },
-  { name: "Kitchen", img: "/photos/rooms/kitchen/kitchen.HEIC", desc: "Well-stocked with full-size appliances." },
-  { name: "Laundry Room", img: "/photos/rooms/laundry/laundry.HEIC", desc: "Washer & dryer, supplies provided." },
-  { name: "Office", img: "/photos/rooms/office/office.HEIC", desc: "Dedicated desk and fast Wi-Fi." },
-  { name: "Gym", img: "/photos/rooms/gym/gym.HEIC", desc: "Treadmill, light weights, and mat." },
+  { name: "Living Room", img: "/photos/rooms/livingroom/livingroom.jpg", desc: "Cozy seating with smart TV and fireplace." },
+  { name: "Sunroom", img: "/photos/rooms/sunroom/sunroom.jpg", desc: "Bright nook for morning coffee." },
+  { name: "Kitchen", img: "/photos/rooms/kitchen/kitchen.jpg", desc: "Well-stocked with full-size appliances." },
+  { name: "Laundry Room", img: "/photos/rooms/laundry/laundry.jpg", desc: "Washer & dryer, supplies provided." },
+  { name: "Office", img: "/photos/rooms/office/office.jpg", desc: "Dedicated desk and fast Wi-Fi." },
+  { name: "Gym", img: "/photos/rooms/gym/gym.jpg", desc: "Treadmill, light weights, and mat." },
 ];
 // --- Things To Do (from welcome book)
 
