@@ -234,6 +234,8 @@ function Nav() {
     { to: "/faq", label: "FAQ" },
   ];
 
+  const houseManualHref = "/guides/house_manual.pdf";
+
   // Close mobile menu on route change
   useEffect(() => {
     setOpen(false);
@@ -276,6 +278,16 @@ function Nav() {
               Book now
             </a>
 
+            {/* Desktop-only House Manual */}
+            <a
+              href={houseManualHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex rounded-2xl border border-moss text-moss px-4 py-2 text-sm font-medium shadow-sm hover:bg-moss/5"
+            >
+              House Manual (PDF)
+            </a>
+
             {/* Hamburger only on mobile */}
             <button
               type="button"
@@ -315,6 +327,16 @@ function Nav() {
               className="mb-1 inline-flex w-full items-center justify-center rounded-2xl bg-moss text-white px-4 py-2 text-sm font-medium shadow hover:opacity-90"
             >
               Book now on Airbnb
+            </a>
+
+                        {/* Mobile House Manual button */}
+            <a
+              href={houseManualHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center rounded-xl border border-moss bg-white text-moss px-4 py-2 text-sm font-medium shadow-sm hover:bg-moss/5"
+            >
+              Open House Manual (PDF)
             </a>
 
             {links.map((it) => (
