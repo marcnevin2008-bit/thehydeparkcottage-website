@@ -544,15 +544,14 @@ function HomePage() {
   useArrowKeys(setActive, images.length);
   useAutoAdvance(!paused, setActive, images.length, 4800);
 
-  // helper: pause now and resume auto-fade after a short delay
   const scheduleResume = () => {
     if (resumeTimeoutRef.current) {
       clearTimeout(resumeTimeoutRef.current);
     }
     resumeTimeoutRef.current = setTimeout(() => {
-      setPaused(false);          // turn auto-fade back on
+      setPaused(false);
       resumeTimeoutRef.current = null;
-    }, 6000); // 6 seconds of inactivity before it starts fading again
+    }, 6000);
   };
 
   useEffect(() => {
@@ -562,117 +561,6 @@ function HomePage() {
       }
     };
   }, []);
-    const touchStartX = useRef(null);
-  const touchStartY = useRef(null);
-  const touchDeltaX = useRef(0);
-
-  const prevHero = () => {
-    setActive((i) => (i - 1 + images.length) % images.length);
-    setPaused(true);
-    scheduleResume();
-  };
-
-  const nextHero = () => {
-    setActive((i) => (i + 1) % images.length);
-    setPaused(true);
-    scheduleResume();
-  };
-
-  const handleHeroTouchStart = (e) => {
-    if (e.touches.length !== 1) return;
-    const t = e.touches[0];
-
-    touchStartX.current = t.clientX;
-    touchStartY.current = t.clientY;
-    touchDeltaX.current = 0;
-
-    // user is interacting → pause fading immediately
-    setPaused(true);
-
-    // don’t let an old timer resume it too early
-    if (resumeTimeoutRef.current) {
-      clearTimeout(resumeTimeoutRef.current);
-      resumeTimeoutRef.current = null;
-    }
-  };
-
-  const handleHeroTouchMove = (e) => {
-    if (touchStartX.current == null) return;
-
-    const t = e.touches[0];
-    const dx = t.clientX - touchStartX.current;
-    const dy = t.clientY - touchStartY.current;
-
-    // Only treat mostly horizontal movement as a swipe
-    if (Math.abs(dx) > Math.abs(dy)) {
-      touchDeltaX.current = dx;
-    }
-  };
-
-  const handleHeroTouchEnd = () => {
-    if (touchStartX.current == null) {
-      scheduleResume();
-      return;
-    }
-
-    const dx = touchDeltaX.current;
-    const threshold = 40; // px required to count as a swipe
-
-    if (Math.abs(dx) > threshold) {
-      if (dx < 0) {
-        // Swipe left → next
-        nextHero();
-      } else {
-        // Swipe right → previous
-        prevHero();
-      }
-    } else {
-      // Not enough movement: just resume auto-fade later
-      scheduleResume();
-    }
-
-    touchStartX.current = null;
-    touchStartY.current = null;
-    touchDeltaX.current = 0;
-  };
-
-  const handleHeroTouchMove = (e) => {
-    if (touchStartX.current == null) return;
-    const t = e.touches[0];
-    const dx = t.clientX - touchStartX.current;
-    const dy = t.clientY - touchStartY.current;
-
-    // only pay attention to mostly horizontal swipes
-    if (Math.abs(dx) > Math.abs(dy)) {
-      touchDeltaX.current = dx;
-    }
-  };
-
-  const handleHeroTouchEnd = () => {
-    if (touchStartX.current == null) {
-      setPaused(false);
-      return;
-    }
-
-    const dx = touchDeltaX.current;
-    const threshold = 40; // px required to count as a swipe
-
-    if (Math.abs(dx) > threshold) {
-      if (dx < 0) {
-        // swipe left → next image
-        nextHero();
-      } else {
-        // swipe right → previous image
-        prevHero();
-      }
-    }
-
-    touchStartX.current = null;
-    touchStartY.current = null;
-    touchDeltaX.current = 0;
-    setPaused(false);
-  };
-
    return (
     <>
       <Helmet>
@@ -755,12 +643,15 @@ function HomePage() {
 
             </div>
 
-            {/* Right: square image synced with gallery */}
+{/* Right: square image synced with gallery */}
 <div className="mx-auto w-full max-w-[720px]">
   <div
     className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5"
     onMouseEnter={() => setPaused(true)}
-    onMouseLeave={() => setPaused(false)}
+    onMouseLeave={() => {
+      setPaused(false);
+      scheduleResume();
+    }}
   >
     {/* Mobile: swipeable slider */}
     <div className="md:hidden h-full">
@@ -1095,7 +986,7 @@ function MobileHeroCarousel({ images = [], interval = 4800 }) {
     return () => clearInterval(id);
   }, [paused, dragging, images.length, interval]);
 
-  // Cleanup timer on unmount
+  // Cleanup timer
   useEffect(() => {
     return () => {
       if (resumeTimeoutRef.current) {
@@ -1111,7 +1002,7 @@ function MobileHeroCarousel({ images = [], interval = 4800 }) {
     resumeTimeoutRef.current = setTimeout(() => {
       setPaused(false);
       resumeTimeoutRef.current = null;
-    }, 5000); // 5s of inactivity before auto-advance resumes
+    }, 5000);
   };
 
   const handleTouchStart = (e) => {
@@ -1142,7 +1033,7 @@ function MobileHeroCarousel({ images = [], interval = 4800 }) {
 
     // Only treat mostly horizontal movement as a swipe
     if (Math.abs(dx) > Math.abs(dy)) {
-      setDragX(dx);
+      setDragX(dx); // actively moves with your finger
     }
   };
 
@@ -1152,12 +1043,10 @@ function MobileHeroCarousel({ images = [], interval = 4800 }) {
       return;
     }
 
-    const threshold = widthRef.current * 0.25; // 25% of width
+    const threshold = widthRef.current * 0.25; // swipe at least 25% of width
     if (dragX < -threshold && images.length > 1) {
-      // Swipe left → next
       setIndex((i) => (i + 1) % images.length);
     } else if (dragX > threshold && images.length > 1) {
-      // Swipe right → previous
       setIndex((i) => (i - 1 + images.length) % images.length);
     }
 
