@@ -539,24 +539,101 @@ function GalleryFeatured({ images, active, setActive, setPaused }) {
 function HomePage() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const resumeTimeoutRef = useRef(null);
+
   useArrowKeys(setActive, images.length);
   useAutoAdvance(!paused, setActive, images.length, 4800);
+
+  // helper: pause now and resume auto-fade after a short delay
+  const scheduleResume = () => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+    }
+    resumeTimeoutRef.current = setTimeout(() => {
+      setPaused(false);          // turn auto-fade back on
+      resumeTimeoutRef.current = null;
+    }, 6000); // 6 seconds of inactivity before it starts fading again
+  };
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
     const touchStartX = useRef(null);
   const touchStartY = useRef(null);
   const touchDeltaX = useRef(0);
 
-  const prevHero = () =>
+  const prevHero = () => {
     setActive((i) => (i - 1 + images.length) % images.length);
-  const nextHero = () =>
+    setPaused(true);
+    scheduleResume();
+  };
+
+  const nextHero = () => {
     setActive((i) => (i + 1) % images.length);
+    setPaused(true);
+    scheduleResume();
+  };
 
   const handleHeroTouchStart = (e) => {
     if (e.touches.length !== 1) return;
     const t = e.touches[0];
+
     touchStartX.current = t.clientX;
     touchStartY.current = t.clientY;
     touchDeltaX.current = 0;
+
+    // user is interacting → pause fading immediately
     setPaused(true);
+
+    // don’t let an old timer resume it too early
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+  };
+
+  const handleHeroTouchMove = (e) => {
+    if (touchStartX.current == null) return;
+
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = t.clientY - touchStartY.current;
+
+    // Only treat mostly horizontal movement as a swipe
+    if (Math.abs(dx) > Math.abs(dy)) {
+      touchDeltaX.current = dx;
+    }
+  };
+
+  const handleHeroTouchEnd = () => {
+    if (touchStartX.current == null) {
+      scheduleResume();
+      return;
+    }
+
+    const dx = touchDeltaX.current;
+    const threshold = 40; // px required to count as a swipe
+
+    if (Math.abs(dx) > threshold) {
+      if (dx < 0) {
+        // Swipe left → next
+        nextHero();
+      } else {
+        // Swipe right → previous
+        prevHero();
+      }
+    } else {
+      // Not enough movement: just resume auto-fade later
+      scheduleResume();
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchDeltaX.current = 0;
   };
 
   const handleHeroTouchMove = (e) => {
