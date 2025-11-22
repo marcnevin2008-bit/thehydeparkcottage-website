@@ -756,19 +756,27 @@ function HomePage() {
             </div>
 
             {/* Right: square image synced with gallery */}
-            <div className="mx-auto w-full max-w-[720px]">
-              <div
-                className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5"
-                onMouseEnter={() => setPaused(true)}
-                onMouseLeave={() => setPaused(false)}
-                onTouchStart={handleHeroTouchStart}
-                onTouchMove={handleHeroTouchMove}
-                onTouchEnd={handleHeroTouchEnd}
-              >
-                <CrossfadeImage src={images[active].src} alt={images[active].alt} duration={2200} />
-              </div>
-            </div>
-          </div>
+<div className="mx-auto w-full max-w-[720px]">
+  <div
+    className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5"
+    onMouseEnter={() => setPaused(true)}
+    onMouseLeave={() => setPaused(false)}
+  >
+    {/* Mobile: swipeable slider */}
+    <div className="md:hidden h-full">
+      <MobileHeroCarousel images={images} interval={4800} />
+    </div>
+
+    {/* Desktop: existing fade hero */}
+    <div className="hidden md:block h-full">
+      <CrossfadeImage
+        src={images[active].src}
+        alt={images[active].alt}
+        duration={2200}
+      />
+    </div>
+  </div>
+</div>
         </div>
       </section>
 
@@ -1065,6 +1073,154 @@ function AmenitiesPage() {
  </>
   );
 }
+
+function MobileHeroCarousel({ images = [], interval = 4800 }) {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+  const widthRef = useRef(1);
+  const containerRef = useRef(null);
+  const resumeTimeoutRef = useRef(null);
+
+  // Auto-advance when not paused or dragging
+  useEffect(() => {
+    if (paused || dragging || images.length <= 1) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % images.length);
+    }, interval);
+    return () => clearInterval(id);
+  }, [paused, dragging, images.length, interval]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const scheduleResume = () => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+    }
+    resumeTimeoutRef.current = setTimeout(() => {
+      setPaused(false);
+      resumeTimeoutRef.current = null;
+    }, 5000); // 5s of inactivity before auto-advance resumes
+  };
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    touchStartX.current = t.clientX;
+    touchStartY.current = t.clientY;
+    setDragX(0);
+    setDragging(true);
+    setPaused(true);
+
+    if (containerRef.current) {
+      widthRef.current = containerRef.current.offsetWidth || 1;
+    }
+
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!dragging || touchStartX.current == null) return;
+
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = t.clientY - touchStartY.current;
+
+    // Only treat mostly horizontal movement as a swipe
+    if (Math.abs(dx) > Math.abs(dy)) {
+      setDragX(dx);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!dragging) {
+      scheduleResume();
+      return;
+    }
+
+    const threshold = widthRef.current * 0.25; // 25% of width
+    if (dragX < -threshold && images.length > 1) {
+      // Swipe left → next
+      setIndex((i) => (i + 1) % images.length);
+    } else if (dragX > threshold && images.length > 1) {
+      // Swipe right → previous
+      setIndex((i) => (i - 1 + images.length) % images.length);
+    }
+
+    setDragX(0);
+    setDragging(false);
+    scheduleResume();
+  };
+
+  const basePercent = -index * 100;
+  const dragPercent = (dragX / widthRef.current) * 100;
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative h-full w-full overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Sliding track */}
+      <div
+        className="flex h-full w-full"
+        style={{
+          transform: `translateX(${basePercent + dragPercent}%)`,
+          transition: dragging ? "none" : "transform 0.45s cubic-bezier(.22,.61,.36,1)",
+        }}
+      >
+        {images.map((img, i) => (
+          <div key={i} className="w-full flex-shrink-0">
+            <img
+              src={img.src}
+              alt={img.alt}
+              className="h-full w-full object-cover"
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Dots – mobile only */}
+      {images.length > 1 && (
+        <div className="absolute bottom-3 inset-x-0 flex justify-center gap-2 md:hidden">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                setIndex(i);
+                setPaused(true);
+                scheduleResume();
+              }}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-2 w-2 rounded-full ${
+                i === index ? "bg-moss" : "bg-white/70"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
   /* Smooth sliding carousel (translateX) */
 function SlidingCarousel({ images = [], interval = 5200 }) {
   const [index, setIndex] = React.useState(0);
