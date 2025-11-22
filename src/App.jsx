@@ -538,29 +538,30 @@ function GalleryFeatured({ images, active, setActive, setPaused }) {
 }
 function HomePage() {
   const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const resumeTimeoutRef = useRef(null);
 
+  // Arrow keys still useful for desktop gallery
   useArrowKeys(setActive, images.length);
-  useAutoAdvance(!paused, setActive, images.length, 4800);
 
-  const scheduleResume = () => {
-    if (resumeTimeoutRef.current) {
-      clearTimeout(resumeTimeoutRef.current);
-    }
-    resumeTimeoutRef.current = setTimeout(() => {
-      setPaused(false);
-      resumeTimeoutRef.current = null;
-    }, 6000);
-  };
+  return (
+    <>
+      <Helmet>
+        {/* ... existing SEO meta ... */}
+      </Helmet>
 
-  useEffect(() => {
-    return () => {
-      if (resumeTimeoutRef.current) {
-        clearTimeout(resumeTimeoutRef.current);
-      }
-    };
-  }, []);
+      {/* Title / hero */}
+      {/* ... left side content stays the same ... */}
+
+      {/* Right: updated hero using only MobileHeroCarousel */}
+      <div className="mx-auto w-full max-w-[720px]">
+        <div className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5">
+          <MobileHeroCarousel images={images} interval={4800} />
+        </div>
+      </div>
+
+      {/* About, Gallery, Location, Hosts, etc. stay unchanged */}
+    </>
+  );
+}
    return (
     <>
       <Helmet>
@@ -643,29 +644,10 @@ function HomePage() {
 
             </div>
 
-{/* Right: square image synced with gallery */}
+{/* Right: hero image slider (all screen sizes) */}
 <div className="mx-auto w-full max-w-[720px]">
-  <div
-    className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5"
-    onMouseEnter={() => setPaused(true)}
-    onMouseLeave={() => {
-      setPaused(false);
-      scheduleResume();
-    }}
-  >
-    {/* Mobile: swipeable slider */}
-    <div className="md:hidden h-full">
-      <MobileHeroCarousel images={images} interval={4800} />
-    </div>
-
-    {/* Desktop: existing fade hero */}
-    <div className="hidden md:block h-full">
-      <CrossfadeImage
-        src={images[active].src}
-        alt={images[active].alt}
-        duration={2200}
-      />
-    </div>
+  <div className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5">
+    <MobileHeroCarousel images={images} interval={4800} />
   </div>
 </div>
         </div>
