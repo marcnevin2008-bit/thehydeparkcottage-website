@@ -541,6 +541,60 @@ function HomePage() {
   const [paused, setPaused] = useState(false);
   useArrowKeys(setActive, images.length);
   useAutoAdvance(!paused, setActive, images.length, 4800);
+    const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+  const touchDeltaX = useRef(0);
+
+  const prevHero = () =>
+    setActive((i) => (i - 1 + images.length) % images.length);
+  const nextHero = () =>
+    setActive((i) => (i + 1) % images.length);
+
+  const handleHeroTouchStart = (e) => {
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    touchStartX.current = t.clientX;
+    touchStartY.current = t.clientY;
+    touchDeltaX.current = 0;
+    setPaused(true);
+  };
+
+  const handleHeroTouchMove = (e) => {
+    if (touchStartX.current == null) return;
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = t.clientY - touchStartY.current;
+
+    // only pay attention to mostly horizontal swipes
+    if (Math.abs(dx) > Math.abs(dy)) {
+      touchDeltaX.current = dx;
+    }
+  };
+
+  const handleHeroTouchEnd = () => {
+    if (touchStartX.current == null) {
+      setPaused(false);
+      return;
+    }
+
+    const dx = touchDeltaX.current;
+    const threshold = 40; // px required to count as a swipe
+
+    if (Math.abs(dx) > threshold) {
+      if (dx < 0) {
+        // swipe left → next image
+        nextHero();
+      } else {
+        // swipe right → previous image
+        prevHero();
+      }
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchDeltaX.current = 0;
+    setPaused(false);
+  };
 
    return (
     <>
@@ -607,7 +661,7 @@ function HomePage() {
   our home offers the perfect base to explore the Hudson River, Rhinebeck, and the many cultural gems of the Hudson Valley.
 </p>
 
-<div className="mt-8 flex gap-3">
+<div className="mt-8 flex flex-wrap gap-3">
   <a
     href={airbnbUrl}
     className="inline-flex rounded-2xl bg-clay text-white px-6 py-3 text-base font-medium shadow-soft hover:opacity-95"
@@ -616,7 +670,7 @@ function HomePage() {
   </a>
   <a
     href="#gallery"
-    className="inline-flex rounded-2xl border border-coal/10 bg-ivory px-6 py-3 text-base font-medium shadow-sm hover:shadow-soft"
+    className="hidden md:inline-flex rounded-2xl border border-coal/10 bg-ivory px-6 py-3 text-base font-medium shadow-sm hover:shadow-soft"
   >
     View photos
   </a>
@@ -630,6 +684,9 @@ function HomePage() {
                 className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5"
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
+                onTouchStart={handleHeroTouchStart}
+                onTouchMove={handleHeroTouchMove}
+                onTouchEnd={handleHeroTouchEnd}
               >
                 <CrossfadeImage src={images[active].src} alt={images[active].alt} duration={2200} />
               </div>
@@ -671,10 +728,17 @@ function HomePage() {
     ))}
   </div>
 </Section>
-      {/* Gallery */}
-      <Section id="gallery" title="Gallery" intro="A glimpse of the spaces you’ll enjoy.">
-        <GalleryFeatured images={images} active={active} setActive={setActive} setPaused={setPaused} />
-      </Section>
+            {/* Gallery – desktop only */}
+      <div className="hidden md:block">
+        <Section id="gallery" title="Gallery" intro="A glimpse of the spaces you’ll enjoy.">
+          <GalleryFeatured
+            images={images}
+            active={active}
+            setActive={setActive}
+            setPaused={setPaused}
+          />
+        </Section>
+      </div>
 
       {/* Location */}
 <Section
