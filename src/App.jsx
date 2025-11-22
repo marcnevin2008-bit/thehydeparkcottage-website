@@ -412,6 +412,57 @@ function useAutoAdvance(enabled, setActive, len, ms = 4800) {
 
 function GalleryFeatured({ images, active, setActive, setPaused }) {
   const stripRef = useRef(null);
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+  const touchDeltaX = useRef(0);
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    touchStartX.current = t.clientX;
+    touchStartY.current = t.clientY;
+    touchDeltaX.current = 0;
+    setPaused(true); // pause auto-advance while interacting
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartX.current == null) return;
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = t.clientY - touchStartY.current;
+
+    // Only care about mostly horizontal swipes
+    if (Math.abs(dx) > Math.abs(dy)) {
+      touchDeltaX.current = dx;
+      // You *can* call e.preventDefault() here, but mobile browsers
+      // require passive listeners to be disabled. We'll skip it for now.
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current == null) {
+      setPaused(false);
+      return;
+    }
+
+    const dx = touchDeltaX.current;
+
+    const threshold = 40; // px needed to count as a swipe
+    if (Math.abs(dx) > threshold) {
+      if (dx < 0) {
+        // Swiped left → next image
+        next();
+      } else {
+        // Swiped right → previous image
+        prev();
+      }
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchDeltaX.current = 0;
+    setPaused(false);
+  };
   const prev = () => setActive((i) => (i - 1 + images.length) % images.length);
   const next = () => setActive((i) => (i + 1) % images.length);
 
@@ -432,6 +483,9 @@ function GalleryFeatured({ images, active, setActive, setPaused }) {
           className="relative aspect-[16/9] overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           <CrossfadeImage src={images[active].src} alt={images[active].alt} duration={2200} />
         </div>
@@ -875,6 +929,51 @@ function SlidingCarousel({ images = [], interval = 5200 }) {
   const [index, setIndex] = React.useState(0);
   const [paused, setPaused] = React.useState(false);
   const trackRef = React.useRef(null);
+    const touchStartX = React.useRef(null);
+  const touchStartY = React.useRef(null);
+  const touchDeltaX = React.useRef(0);
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    touchStartX.current = t.clientX;
+    touchStartY.current = t.clientY;
+    touchDeltaX.current = 0;
+    setPaused(true);
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartX.current == null) return;
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = t.clientY - touchStartY.current;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      touchDeltaX.current = dx;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current == null) {
+      setPaused(false);
+      return;
+    }
+
+    const dx = touchDeltaX.current;
+    const threshold = 40;
+    if (Math.abs(dx) > threshold) {
+      if (dx < 0) {
+        next();
+      } else {
+        prev();
+      }
+    }
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchDeltaX.current = 0;
+    setPaused(false);
+  };
 
   // Auto-advance
   React.useEffect(() => {
@@ -893,6 +992,9 @@ function SlidingCarousel({ images = [], interval = 5200 }) {
       className="relative overflow-hidden rounded-2xl ring-1 ring-coal/5 group"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Track */}
       <div
