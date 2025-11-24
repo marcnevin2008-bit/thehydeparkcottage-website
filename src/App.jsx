@@ -538,31 +538,14 @@ function GalleryFeatured({ images, active, setActive, setPaused }) {
 }
 function HomePage() {
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   // Arrow keys still useful for desktop gallery
   useArrowKeys(setActive, images.length);
+  // If you want auto-advance, keep this; otherwise you can remove it
+  useAutoAdvance(!paused, setActive, images.length, 4800);
 
   return (
-    <>
-      <Helmet>
-        {/* ... existing SEO meta ... */}
-      </Helmet>
-
-      {/* Title / hero */}
-      {/* ... left side content stays the same ... */}
-
-      {/* Right: updated hero using only MobileHeroCarousel */}
-      <div className="mx-auto w-full max-w-[720px]">
-        <div className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5">
-          <MobileHeroCarousel images={images} interval={4800} />
-        </div>
-      </div>
-
-      {/* About, Gallery, Location, Hosts, etc. stay unchanged */}
-    </>
-  );
-}
-   return (
     <>
       <Helmet>
         <title>The Hyde Park Cottage – Historic Hyde Park NY Airbnb</title>
@@ -575,7 +558,10 @@ function HomePage() {
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="The Hyde Park Cottage" />
-        <meta property="og:title" content="The Hyde Park Cottage – Historic Hyde Park NY Airbnb" />
+        <meta
+          property="og:title"
+          content="The Hyde Park Cottage – Historic Hyde Park NY Airbnb"
+        />
         <meta
           property="og:description"
           content="Stay at The Hyde Park Cottage, a cozy 1940s retreat in historic Hyde Park, NY—modern amenities, vintage charm, and a perfect base for exploring the Hudson Valley, CIA, FDR Library, and the Walkway Over the Hudson."
@@ -583,8 +569,7 @@ function HomePage() {
         <meta property="og:url" content="https://www.thehydeparkcottage.com/" />
         <meta
           property="og:image"
-          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
-"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
         />
         <meta
           property="og:image:alt"
@@ -594,15 +579,17 @@ function HomePage() {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="The Hyde Park Cottage – Historic Hyde Park NY Airbnb" />
+        <meta
+          name="twitter:title"
+          content="The Hyde Park Cottage – Historic Hyde Park NY Airbnb"
+        />
         <meta
           name="twitter:description"
           content="Stay at The Hyde Park Cottage, a cozy 1940s retreat in historic Hyde Park, NY—modern amenities, vintage charm, and a perfect base for exploring the Hudson Valley."
         />
         <meta
           name="twitter:image"
-          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg
-"
+          content="https://thehydeparkcottage.com/og/the-hyde-park-cottage-og.jpg"
         />
 
         <meta name="robots" content="index,follow" />
@@ -614,81 +601,96 @@ function HomePage() {
           <div className="grid md:grid-cols-2 gap-10 items-center">
             {/* Left: Title + CTA */}
             <div className="p-0 md:p-2">
-              <p className="uppercase tracking-wider text-xs text-coal/60">Short-Term Rental • Hudson Valley</p>
+              <p className="uppercase tracking-wider text-xs text-coal/60">
+                Short-Term Rental • Hudson Valley
+              </p>
+
               <h1 className="text-4xl md:text-5xl font-display font-semibold tracking-tight mt-2 text-moss">
                 {SITE_NAME} • {SITE_TAGLINE}
               </h1>
+
               <p className="mt-4 text-lg text-coal/80">
                 A cozy home with vintage charm and modern comforts—your base for exploring Hyde Park and the Hudson Valley.
               </p>
+
               <p className="mt-6 text-base md:text-lg text-coal/80 leading-relaxed max-w-xl">
-  Centered in historic Hyde Park, this cozy 1940s home blends vintage character with modern comfort.
-  Whether you’re planning a family getaway, a weekend retreat with friends, or a quiet escape,
-  our home offers the perfect base to explore the Hudson River, Rhinebeck, and the many cultural gems of the Hudson Valley.
-</p>
+                Centered in historic Hyde Park, this cozy 1940s home blends vintage character with modern comfort.
+                Whether you’re planning a family getaway, a weekend retreat with friends, or a quiet escape,
+                our home offers the perfect base to explore the Hudson River, Rhinebeck, and the many cultural gems of the Hudson Valley.
+              </p>
 
-<div className="mt-8 flex flex-wrap gap-3">
-  <a
-    href={airbnbUrl}
-    className="inline-flex rounded-2xl bg-clay text-white px-6 py-3 text-base font-medium shadow-soft hover:opacity-95"
-  >
-    Book your stay
-  </a>
-  <a
-    href="#gallery"
-    className="hidden md:inline-flex rounded-2xl border border-coal/10 bg-ivory px-6 py-3 text-base font-medium shadow-sm hover:shadow-soft"
-  >
-    View photos
-  </a>
-</div>
-
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href={airbnbUrl}
+                  className="inline-flex rounded-2xl bg-clay text-white px-6 py-3 text-base font-medium shadow-soft hover:opacity-95"
+                >
+                  Book your stay
+                </a>
+                <a
+                  href="#gallery"
+                  className="hidden md:inline-flex rounded-2xl border border-coal/10 bg-ivory px-6 py-3 text-base font-medium shadow-sm hover:shadow-soft"
+                >
+                  View photos
+                </a>
+              </div>
             </div>
 
-{/* Right: hero image slider (all screen sizes) */}
-<div className="mx-auto w-full max-w-[720px]">
-  <div className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5">
-    <MobileHeroCarousel images={images} interval={4800} />
-  </div>
-</div>
+            {/* Right: hero image slider */}
+            <div className="mx-auto w-full max-w-[720px]">
+              <div className="aspect-square overflow-hidden rounded-3xl shadow-soft ring-1 ring-coal/5">
+                <MobileHeroCarousel images={images} interval={4800} />
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* About */}
-      <Section id="about" title="About" intro="A bright, comfortable base for exploring the Hudson Valley." tone="dark">
-  {/* Beds & Baths — quick stats */}
-  <div className="grid sm:grid-cols-3 gap-4 mb-8">
-    {welcomeStats.map((s, i) => (
-      <div
-        key={i}
-        className="rounded-2xl border border-coal/10 bg-white/80 p-5 text-center shadow-soft"
+      <Section
+        id="about"
+        title="About"
+        intro="A bright, comfortable base for exploring the Hudson Valley."
+        tone="dark"
       >
-        <div className="text-3xl font-display text-moss leading-none">{s.value}</div>
-        <div className="mt-1 text-coal/70">{s.label}</div>
-      </div>
-    ))}
-  </div>
+        {/* Beds & Baths — quick stats */}
+        <div className="grid sm:grid-cols-3 gap-4 mb-8">
+          {welcomeStats.map((s, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-coal/10 bg-white/80 p-5 text-center shadow-soft"
+            >
+              <div className="text-3xl font-display text-moss leading-none">{s.value}</div>
+              <div className="mt-1 text-coal/70">{s.label}</div>
+            </div>
+          ))}
+        </div>
 
-  {/* Long intro paragraph */}
-  <p className="text-lg leading-relaxed text-coal/85 max-w-3xl">
-    Some stand out amenities.
-  </p>
+        {/* Long intro paragraph */}
+        <p className="text-lg leading-relaxed text-coal/85 max-w-3xl">
+          Some stand out amenities.
+        </p>
 
-  {/* Top features — six tiles */}
-  <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-    {topFeatures.map((f, i) => (
-      <div
-        key={i}
-        className="rounded-2xl border border-coal/10 bg-white/80 p-5 shadow-soft"
-      >
-        <h3 className="text-lg font-display text-moss">{f.title}</h3>
-        <p className="text-coal/80 mt-1">{f.desc}</p>
-      </div>
-    ))}
-  </div>
-</Section>
-            {/* Gallery – desktop only */}
+        {/* Top features — six tiles */}
+        <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {topFeatures.map((f, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-coal/10 bg-white/80 p-5 shadow-soft"
+            >
+              <h3 className="text-lg font-display text-moss">{f.title}</h3>
+              <p className="text-coal/80 mt-1">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* Gallery – desktop only */}
       <div className="hidden md:block">
-        <Section id="gallery" title="Gallery" intro="A glimpse of the spaces you’ll enjoy.">
+        <Section
+          id="gallery"
+          title="Gallery"
+          intro="A glimpse of the spaces you’ll enjoy."
+        >
           <GalleryFeatured
             images={images}
             active={active}
@@ -699,81 +701,80 @@ function HomePage() {
       </div>
 
       {/* Location */}
-<Section
-  id="location"
-  title="Location"
-  intro="Central to Hyde Park highlights and Hudson Valley day trips."
-  tone="dark"
->
-  <div className="grid md:grid-cols-2 gap-6 items-stretch">
-    {/* Points of Interest (same height as map) */}
-    <div className="rounded-3xl border border-coal/10 bg-white/70 p-6 shadow-soft h-full min-h-[360px] flex items-center">
-      <div className="w-full">
-        <h3 className="text-lg font-display text-moss">Nearby</h3>
-        <ul className="mt-3 space-y-2 text-coal/85">
-          {thingsToDo.map((t, i) => (
-            <li key={i}>
-              <span className="font-medium">{t.name}</span>
-              <span className="text-coal/60"> • {t.time}</span>
-              <div className="text-coal/80">{t.desc}</div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+      <Section
+        id="location"
+        title="Location"
+        intro="Central to Hyde Park highlights and Hudson Valley day trips."
+        tone="dark"
+      >
+        <div className="grid md:grid-cols-2 gap-6 items-stretch">
+          {/* Points of Interest */}
+          <div className="rounded-3xl border border-coal/10 bg-white/70 p-6 shadow-soft h-full min-h-[360px] flex items-center">
+            <div className="w-full">
+              <h3 className="text-lg font-display text-moss">Nearby</h3>
+              <ul className="mt-3 space-y-2 text-coal/85">
+                {thingsToDo.map((t, i) => (
+                  <li key={i}>
+                    <span className="font-medium">{t.name}</span>
+                    <span className="text-coal/60"> • {t.time}</span>
+                    <div className="text-coal/80">{t.desc}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-    {/* Map */}
-    <div className="overflow-hidden rounded-3xl border border-coal/10 shadow-soft bg-white/70 h-full min-h-[360px]">
-      <iframe
-        title="Map"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3051.466967599726!2d-73.933!3d41.783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDFuNDYnNTguOCJOIDczwrA1NSc1OC44Ilc!5e0!3m2!1sen!2sus!4v0000000000000"
-        className="w-full h-full"
-        style={{ border: 0 }}
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-      />
-    </div>
-  </div>
-</Section>
+          {/* Map */}
+          <div className="overflow-hidden rounded-3xl border border-coal/10 shadow-soft bg-white/70 h-full min-h-[360px]">
+            <iframe
+              title="Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3051.466967599726!2d-73.933!3d41.783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDFuNDYnNTguOCJOIDczwrA1NSc1OC44Ilc!5e0!3m2!1sen!2sus!4v0000000000000"
+              className="w-full h-full"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </Section>
 
-{/* Your Hosts */}
-<Section
-  id="hosts"
-  title="Your Hosts"
-  intro="Meet the people behind Hyde Park Cottage."
->
-  <div className="flex flex-col md:flex-row items-center gap-6">
-    {/* Photo - responsive square, left aligned */}
-    <div className="w-40 h-40 md:w-60 md:h-60 lg:w-96 lg:h-96 overflow-hidden rounded-2xl shadow-soft ring-1 ring-coal/5 flex-shrink-0">
-      <img
-  src="/photos/hosts/marc_caitlin.jpg"
-  alt="Marc & Caitlin"
-  className="w-full h-full object-cover"
-/>
-    </div>
+      {/* Your Hosts */}
+      <Section
+        id="hosts"
+        title="Your Hosts"
+        intro="Meet the people behind Hyde Park Cottage."
+      >
+        <div className="flex flex-col md:flex-row items-center gap-6">
+          {/* Photo */}
+          <div className="w-40 h-40 md:w-60 md:h-60 lg:w-96 lg:h-96 overflow-hidden rounded-2xl shadow-soft ring-1 ring-coal/5 flex-shrink-0">
+            <img
+              src="/photos/hosts/marc_caitlin.jpg"
+              alt="Marc & Caitlin"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-    {/* Text - vertically centered next to photo */}
-    <div className="flex-1 flex flex-col justify-center">
-      <h3 className="text-2xl font-display text-moss">Marc & Caitlin</h3>
-      <p className="mt-3 text-coal/80 leading-relaxed">
-        We’re thrilled to welcome you to Hyde Park Cottage. As hands-on hosts, we’ve put care into every
-        detail of the home—from the cozy fireplace to the well-stocked kitchen—so your stay is as
-        comfortable as possible. Whether you’re here for a weekend getaway, exploring the Hudson Valley’s
-        history, or simply relaxing, we’re happy to share our local favorites and help you feel at home.
-      </p>
-      <p className="mt-3 text-coal/70 text-sm">
-        Questions before or during your stay? Reach us anytime at{" "}
-        <a href="mailto:stay@carverhome.co" className="underline">
-          info@thehydeparkcottage.com
-        </a>.
-      </p>
-    </div>
-  </div>
-</Section>
+          {/* Text */}
+          <div className="flex-1 flex flex-col justify-center">
+            <h3 className="text-2xl font-display text-moss">Marc & Caitlin</h3>
+            <p className="mt-3 text-coal/80 leading-relaxed">
+              We’re thrilled to welcome you to Hyde Park Cottage. As hands-on hosts, we’ve put care into every
+              detail of the home—from the cozy fireplace to the well-stocked kitchen—so your stay is as
+              comfortable as possible. Whether you’re here for a weekend getaway, exploring the Hudson Valley’s
+              history, or simply relaxing, we’re happy to share our local favorites and help you feel at home.
+            </p>
+            <p className="mt-3 text-coal/70 text-sm">
+              Questions before or during your stay? Reach us anytime at{" "}
+              <a href="mailto:stay@carverhome.co" className="underline">
+                info@thehydeparkcottage.com
+              </a>.
+            </p>
+          </div>
+        </div>
+      </Section>
     </>
   );
 }
-
 /* ----------------------- Subpages (own URLs) ----------------------- */
 function IconLeaf() {
   return (
